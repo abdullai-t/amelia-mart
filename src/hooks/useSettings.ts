@@ -12,6 +12,9 @@ interface Settings {
   emailNotifications: boolean;
   orderNotifications: boolean;
   lowStockAlerts: boolean;
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
 }
 
 export function useSettings() {
