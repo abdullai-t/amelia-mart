@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { categories } from "@/data/products";
+import { useSettings } from "@/hooks/useSettings";
 
 interface CategorySidebarProps {
   onCategoryChange?: (category: string) => void;
@@ -13,6 +14,7 @@ export default function CategorySidebar({
 }: CategorySidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { settings } = useSettings();
   const category = searchParams.get("category");
 
   const isActive = (catId: string) => {
@@ -28,11 +30,23 @@ export default function CategorySidebar({
       {/* All Products Link */}
       <Link
         href="/products"
-        className={`block px-4 py-2 rounded-lg mb-2 transition-colors ${
-          pathname === "/products" && !category
-            ? "bg-green-600 text-white font-semibold"
-            : "text-gray-700 hover:bg-green-50"
-        }`}
+        className="block px-4 py-2 rounded-lg mb-2 transition-colors text-white font-semibold"
+        style={{
+          backgroundColor: pathname === "/products" && !category 
+            ? (settings?.primaryColor || '#16a34a') 
+            : 'transparent',
+          color: pathname === "/products" && !category ? 'white' : '#374151',
+        }}
+        onMouseEnter={(e) => {
+          if (pathname !== "/products" || category) {
+            e.currentTarget.style.backgroundColor = `${settings?.primaryColor || '#16a34a'}20`;
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (pathname !== "/products" || category) {
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }
+        }}
       >
         All Products
       </Link>
@@ -44,11 +58,23 @@ export default function CategorySidebar({
             key={cat.id}
             href={`/products/${cat.id}`}
             onClick={() => onCategoryChange?.(cat.id)}
-            className={`block px-4 py-2 rounded-lg transition-colors ${
-              isActive(cat.id)
-                ? "bg-green-600 text-white font-semibold"
-                : "text-gray-700 hover:bg-green-50"
-            }`}
+            className="block px-4 py-2 rounded-lg transition-colors"
+            style={{
+              backgroundColor: isActive(cat.id) 
+                ? (settings?.primaryColor || '#16a34a') 
+                : 'transparent',
+              color: isActive(cat.id) ? 'white' : '#374151',
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive(cat.id)) {
+                e.currentTarget.style.backgroundColor = `${settings?.primaryColor || '#16a34a'}20`;
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive(cat.id)) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
           >
             <div className="flex items-center gap-2">
               <span className="text-lg">{getCategoryEmoji(cat.id)}</span>

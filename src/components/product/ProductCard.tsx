@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { formatPrice } from "@/utils/helpers";
 import { getOptimizedImageUrl, isEmoji } from "@/utils/cloudinary";
+import { useSettings } from "@/hooks/useSettings";
 
 interface ProductCardProps {
   product: Product;
@@ -16,6 +17,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCartStore();
+  const { settings } = useSettings();
   const [isAdding, setIsAdding] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
 
@@ -33,8 +35,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col h-full">
       {/* Image Container */}
-      <Link href={`/product/${product.id}`} className="relative overflow-hidden bg-gray-100 h-48 sm:h-56">
-        <div className="w-full h-full bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+      <Link href={`/product/${product.id}`} className="relative overflow-hidden h-48 sm:h-56" style={{ backgroundColor: `${settings?.primaryColor}10` }}>
+        <div className="w-full h-full flex items-center justify-center">
           {isEmoji(product.image) ? (
             <span className="text-5xl">{product.image}</span>
           ) : (
@@ -62,7 +64,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Content */}
       <div className="p-4 flex-1 flex flex-col">
-        <Link href={`/product/${product.id}`} className="hover:text-green-600 transition-colors">
+        <Link href={`/product/${product.id}`} className="hover:opacity-70 transition-opacity" style={{ color: settings?.primaryColor }}>
           <h3 className="font-semibold text-gray-800 line-clamp-2 mb-2">
             {product.name}
           </h3>
@@ -82,7 +84,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Price and Unit */}
         <div className="mb-4">
-          <p className="text-2xl font-bold text-green-600">
+          <p className="text-2xl font-bold" style={{ color: settings?.primaryColor }}>
             {formatPrice(product.price)}
           </p>
           <p className="text-sm text-gray-500">per {product.unit}</p>
@@ -93,7 +95,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           <Button
             onClick={handleAddToCart}
             disabled={product.stock === 0 || isAdding}
-            className="flex-1 bg-green-600 hover:bg-green-700 text-white gap-2"
+            className="flex-1 text-white gap-2"
+            style={{ backgroundColor: settings?.primaryColor }}
             size="sm"
           >
             <ShoppingCart size={16} />

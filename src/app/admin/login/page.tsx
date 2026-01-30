@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSettings } from "@/hooks/useSettings";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AdminLoginPage() {
+  const { settings } = useSettings();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,13 +108,27 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
+                  className="w-full pl-10 pr-12 py-3 border rounded-lg focus:outline-none"
+                  style={{
+                    borderColor: '#d1d5db',
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = settings?.primaryColor || '#16a34a';
+                    e.currentTarget.style.boxShadow = `0 0 0 3px ${settings?.primaryColor}20`;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = '#d1d5db';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
                   disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  style={{ color: settings?.primaryColor }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity"
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -122,7 +138,13 @@ export default function AdminLoginPage() {
             {/* Login Button */}
             <Button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-lg font-semibold"
+              className="w-full text-white py-3 text-lg font-semibold"
+              style={{ 
+                backgroundColor: settings?.primaryColor || '#16a34a',
+                opacity: isLoading ? 0.7 : 1
+              }}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.opacity = '0.9')}
+              onMouseLeave={(e) => !isLoading && (e.currentTarget.style.opacity = '1')}
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Sign In"}

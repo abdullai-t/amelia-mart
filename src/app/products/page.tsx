@@ -6,10 +6,12 @@ import CategorySidebar from "@/components/product/CategorySidebar";
 import ProductGrid from "@/components/product/ProductGrid";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
+import { useSettings } from "@/hooks/useSettings";
 import { Search } from "lucide-react";
 
 function ProductsContent() {
   const searchParams = useSearchParams();
+  const { settings } = useSettings();
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
   const [sortBy, setSortBy] = useState<"name" | "price-low" | "price-high" | "newest">("name");
@@ -97,11 +99,17 @@ function ProductsContent() {
             placeholder="Search for products..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-green-200 focus:outline-none focus:border-green-500"
+            className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors"
+            style={{
+              borderColor: settings?.primaryColor || '#16a34a',
+            }}
+            onFocus={(e) => e.target.style.borderColor = settings?.secondaryColor || '#059669'}
+            onBlur={(e) => e.target.style.borderColor = settings?.primaryColor || '#16a34a'}
           />
           <button
             type="submit"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+            style={{ color: settings?.primaryColor || '#16a34a' }}
           >
             <Search size={20} />
           </button>
@@ -125,7 +133,8 @@ function ProductsContent() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-green-500"
+              className="px-4 py-2 rounded-lg border focus:outline-none transition-colors"
+              style={{ borderColor: settings?.primaryColor || '#16a34a' }}
             >
               <option value="name">Sort: A-Z</option>
               <option value="price-low">Price: Low to High</option>

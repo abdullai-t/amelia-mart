@@ -83,5 +83,8 @@ model Settings {
   emailNotifications    Boolean  @default(true)
   orderNotifications    Boolean  @default(true)
   lowStockAlerts        Boolean  @default(true)
+  primaryColor          String   @default("#16a34a")
+  secondaryColor        String   @default("#059669")
+  accentColor           String   @default("#10b981")
   updatedAt             DateTime @updatedAt
 }

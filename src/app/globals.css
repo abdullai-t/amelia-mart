@@ -48,6 +48,9 @@
 
 :root {
   --radius: 0.625rem;
+  --color-primary: #16a34a;
+  --color-secondary: #059669;
+  --color-accent: #10b981;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -122,4 +125,115 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+  .bg-primary-theme {
+    @apply transition-colors;
+    background-color: var(--color-primary);
+  }
+  
+  .bg-secondary-theme {
+    @apply transition-colors;
+    background-color: var(--color-secondary);
+  }
+  
+  .bg-accent-theme {
+    @apply transition-colors;
+    background-color: var(--color-accent);
+  }
+  
+  .text-primary-theme {
+    @apply transition-colors;
+    color: var(--color-primary);
+  }
+  
+  .text-secondary-theme {
+    @apply transition-colors;
+    color: var(--color-secondary);
+  }
+  
+  .text-accent-theme {
+    @apply transition-colors;
+    color: var(--color-accent);
+  }
+  
+  .border-primary-theme {
+    @apply transition-colors;
+    border-color: var(--color-primary);
+  }
+  
+  .border-secondary-theme {
+    @apply transition-colors;
+    border-color: var(--color-secondary);
+  }
+  
+  .border-accent-theme {
+    @apply transition-colors;
+    border-color: var(--color-accent);
+  }
+  
+  /* Button theme variants */
+  button[data-variant="default"] {
+    @apply transition-all;
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  button[data-variant="default"]:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+  
+  button[data-variant="secondary"] {
+    @apply transition-all;
+    background-color: var(--color-secondary);
+    color: white;
+  }
+  
+  button[data-variant="secondary"]:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+  
+  button[data-variant="link"] {
+    color: var(--color-primary);
+  }
+  
+  button[data-variant="link"]:hover:not(:disabled) {
+    color: var(--color-secondary);
+  }
+  
+  /* Background theme utilities */
+  .bg-theme-primary {
+    background-color: var(--color-primary);
+  }
+  
+  .bg-theme-secondary {
+    background-color: var(--color-secondary);
+  }
+  
+  .bg-theme-accent {
+    background-color: var(--color-accent);
+  }
+}
+
+/* Global button and interactive elements styling */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+a {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Input focus states with theme color */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Smooth transitions for theme changes */
+:root {
+  transition: --color-primary 0.3s ease-in-out, --color-secondary 0.3s ease-in-out, --color-accent 0.3s ease-in-out;
 }

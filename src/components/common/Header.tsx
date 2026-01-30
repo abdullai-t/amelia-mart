@@ -36,13 +36,16 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-green-200 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm" style={{ borderColor: `${settings?.primaryColor}20` }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow"
+                style={{ backgroundColor: settings?.primaryColor }}
+              >
                 <span className="text-2xl font-bold text-white">A</span>
               </div>
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center">
@@ -50,7 +53,7 @@ export default function Header() {
               </div>
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold" style={{ color: settings?.primaryColor }}>
                 {settings?.storeName || "Amelia Mart"}
               </h1>
               <p className="text-xs text-gray-600 font-medium">Fresh & Quality Products</p>
@@ -63,9 +66,12 @@ export default function Header() {
               href="/"
               className={`transition-colors ${
                 isActive("/")
-                  ? "text-green-600 font-semibold"
-                  : "text-gray-700 hover:text-green-600"
+                  ? "font-semibold"
+                  : "text-gray-700"
               }`}
+              style={{
+                color: isActive("/") ? settings?.primaryColor : undefined,
+              }}
             >
               Home
             </Link>
@@ -73,9 +79,12 @@ export default function Header() {
               href="/products"
               className={`transition-colors ${
                 isActive("/products")
-                  ? "text-green-600 font-semibold"
-                  : "text-gray-700 hover:text-green-600"
+                  ? "font-semibold"
+                  : "text-gray-700"
               }`}
+              style={{
+                color: isActive("/products") ? settings?.primaryColor : undefined,
+              }}
             >
               Products
             </Link>
@@ -83,9 +92,12 @@ export default function Header() {
               href="/about"
               className={`transition-colors ${
                 isActive("/about")
-                  ? "text-green-600 font-semibold"
-                  : "text-gray-700 hover:text-green-600"
+                  ? "font-semibold"
+                  : "text-gray-700"
               }`}
+              style={{
+                color: isActive("/about") ? settings?.primaryColor : undefined,
+              }}
             >
               About
             </Link>
@@ -102,11 +114,17 @@ export default function Header() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-green-200 focus:outline-none focus:border-green-500"
+                className="w-full px-4 py-2 rounded-lg border focus:outline-none"
+                style={{
+                  borderColor: settings?.primaryColor,
+                }}
               />
               <button
                 type="submit"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:opacity-70 transition-opacity"
+                style={{
+                  color: settings?.primaryColor,
+                }}
               >
                 <Search size={18} />
               </button>
@@ -136,7 +154,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-green-200 py-4">
+          <div className="md:hidden border-t py-4" style={{ borderColor: `${settings?.primaryColor}20` }}>
             <form onSubmit={handleSearch} className="mb-4">
               <div className="relative">
                 <input
@@ -144,11 +162,17 @@ export default function Header() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-green-200 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-2 rounded-lg border focus:outline-none"
+                  style={{
+                    borderColor: settings?.primaryColor,
+                  }}
                 />
                 <button
                   type="submit"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  style={{
+                    color: settings?.primaryColor,
+                  }}
                 >
                   <Search size={18} />
                 </button>
@@ -160,9 +184,12 @@ export default function Header() {
                 href="/"
                 className={`transition-colors ${
                   isActive("/")
-                    ? "text-green-600 font-semibold"
+                    ? "font-semibold"
                     : "text-gray-700"
                 }`}
+                style={{
+                  color: isActive("/") ? settings?.primaryColor : undefined,
+                }}
               >
                 Home
               </Link>
@@ -170,9 +197,12 @@ export default function Header() {
                 href="/products"
                 className={`transition-colors ${
                   isActive("/products")
-                    ? "text-green-600 font-semibold"
+                    ? "font-semibold"
                     : "text-gray-700"
                 }`}
+                style={{
+                  color: isActive("/products") ? settings?.primaryColor : undefined,
+                }}
               >
                 Products
               </Link>
@@ -180,9 +210,12 @@ export default function Header() {
                 href="/about"
                 className={`transition-colors ${
                   isActive("/about")
-                    ? "text-green-600 font-semibold"
+                    ? "font-semibold"
                     : "text-gray-700"
                 }`}
+                style={{
+                  color: isActive("/about") ? settings?.primaryColor : undefined,
+                }}
               >
                 About
               </Link>

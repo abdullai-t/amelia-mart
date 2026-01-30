@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Eye, Mail, Phone } from "lucide-react";
 import { formatDate } from "@/utils/helpers";
+import { useSettings } from "@/hooks/useSettings";
 import { toast } from "sonner";
 
 interface Customer {
@@ -21,6 +22,7 @@ interface Customer {
 }
 
 export default function CustomersManagement() {
+  const { settings } = useSettings();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -59,7 +61,7 @@ export default function CustomersManagement() {
       {loading ? (
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: settings?.primaryColor }}></div>
             <p className="text-gray-600">Loading customers...</p>
           </div>
         </div>
@@ -102,13 +104,17 @@ export default function CustomersManagement() {
       {/* Search */}
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex items-center gap-2">
-          <Search className="text-gray-400" size={20} />
+          <Search size={20} style={{ color: settings?.primaryColor }} />
           <Input
             type="text"
             placeholder="Search by name, email, or phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1"
+            style={{
+              borderColor: settings?.primaryColor,
+              outlineColor: settings?.secondaryColor,
+            }}
           />
         </div>
       </div>
@@ -117,34 +123,38 @@ export default function CustomersManagement() {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead style={{ backgroundColor: `${settings?.primaryColor}10`, borderBottomColor: settings?.primaryColor, borderBottomWidth: '2px' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Contact
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Location
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Orders
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Total Spent
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Joined
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredCustomers.map((customer) => (
-                <tr key={customer.id} className="hover:bg-gray-50">
+              <tr 
+                key={customer.id}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}10`}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+              >
                   <td className="px-6 py-4">
                     <div>
                       <p className="font-semibold text-gray-900">{customer.name}</p>
@@ -191,6 +201,9 @@ export default function CustomersManagement() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setSelectedCustomer(customer)}
+                      style={{ color: settings?.primaryColor }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}20`}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
                       <Eye size={16} className="mr-1" />
                       View
@@ -208,13 +221,9 @@ export default function CustomersManagement() {
 
     {/* Customer Details Modal */}
     {selectedCustomer && (
-      <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-black/10 backdrop-blur-md flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-lg max-w-2xl w-full">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900">Customer Details</h2>
-          </div>
-          
-          <div className="p-6 space-y-6">
+            <div className="p-6 border-b" style={{ borderColor: settings?.primaryColor }}>
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Name</p>
@@ -264,6 +273,7 @@ export default function CustomersManagement() {
               onClick={() => setSelectedCustomer(null)}
               className="w-full"
               variant="outline"
+              style={{ borderColor: settings?.primaryColor, color: settings?.primaryColor }}
             >
               Close
             </Button>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Eye, Download } from "lucide-react";
 import { formatPrice, formatDate } from "@/utils/helpers";
+import { useSettings } from "@/hooks/useSettings";
 import { toast } from "sonner";
 
 interface Order {
@@ -30,6 +31,7 @@ interface Order {
 }
 
 export default function OrdersManagement() {
+  const { settings } = useSettings();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -108,7 +110,7 @@ export default function OrdersManagement() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: settings?.primaryColor }}></div>
           <p className="text-gray-600">Loading orders...</p>
         </div>
       </div>
@@ -123,7 +125,11 @@ export default function OrdersManagement() {
           <h1 className="text-3xl font-bold text-gray-900">Orders Management</h1>
           <p className="text-gray-600 mt-1">{orders.length} total orders</p>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700">
+        <Button 
+          style={{ backgroundColor: settings?.primaryColor, color: 'white' }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+        >
           <Download size={20} className="mr-2" />
           Export Orders
         </Button>
@@ -133,20 +139,28 @@ export default function OrdersManagement() {
       <div className="bg-white rounded-lg shadow p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
-            <Search className="text-gray-400" size={20} />
+            <Search size={20} style={{ color: settings?.primaryColor }} />
             <Input
               type="text"
               placeholder="Search by order number, customer name, or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1"
+              style={{
+                borderColor: settings?.primaryColor,
+                outlineColor: settings?.secondaryColor,
+              }}
             />
           </div>
           
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md"
+            className="px-3 py-2 rounded-md"
+            style={{
+              borderColor: settings?.primaryColor,
+              color: settings?.primaryColor,
+            }}
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -162,34 +176,38 @@ export default function OrdersManagement() {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead style={{ backgroundColor: `${settings?.primaryColor}10`, borderBottomColor: settings?.primaryColor, borderBottomWidth: '2px' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Order #
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Total
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Payment
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
+              <tr 
+                key={order.id}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}10`}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+              >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <p className="font-semibold text-gray-900">{order.orderNumber}</p>
                   </td>
@@ -229,6 +247,9 @@ export default function OrdersManagement() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setSelectedOrder(order)}
+                      style={{ color: settings?.primaryColor }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}20`}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
                       <Eye size={16} className="mr-1" />
                       View
@@ -243,11 +264,11 @@ export default function OrdersManagement() {
 
       {/* Order Details Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/10 backdrop-blur-md flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6 border-b" style={{ borderColor: settings?.primaryColor }}>
               <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
-              <p className="text-gray-600">{selectedOrder.orderNumber}</p>
+              <p style={{ color: settings?.primaryColor }}>{selectedOrder.orderNumber}</p>
             </div>
             
             <div className="p-6 space-y-6">
@@ -301,6 +322,7 @@ export default function OrdersManagement() {
                 onClick={() => setSelectedOrder(null)}
                 className="w-full"
                 variant="outline"
+                style={{ borderColor: settings?.primaryColor, color: settings?.primaryColor }}
               >
                 Close
               </Button>

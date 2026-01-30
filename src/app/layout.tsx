@@ -7,6 +7,7 @@ import Footer from "@/components/common/Footer";
 import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}
       >
         <AuthProvider>
-          {!isAdminRoute && <Header />}
-          <main className="min-h-screen">
-            {children}
-          </main>
-          {!isAdminRoute && <Footer />}
-          <Toaster position="bottom-right" />
+          <ThemeProvider>
+            {!isAdminRoute && <Header />}
+            <main className="min-h-screen">
+              {children}
+            </main>
+            {!isAdminRoute && <Footer />}
+            <Toaster position="bottom-right" />
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>

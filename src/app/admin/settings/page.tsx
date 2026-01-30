@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Save, Store, CreditCard, Truck, Bell } from "lucide-react";
 import { toast } from "sonner";
+import { themes } from "@/utils/themes";
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -28,6 +29,11 @@ export default function SettingsPage() {
     
     // Tax Settings
     taxRate: 2.5,
+    
+    // Theme Settings
+    primaryColor: "#16a34a",
+    secondaryColor: "#059669",
+    accentColor: "#10b981",
     
     // Notification Settings
     emailNotifications: true,
@@ -57,6 +63,9 @@ export default function SettingsPage() {
         shippingFee: data.shippingFee,
         deliveryTime: data.deliveryTime.replace(' days', ''),
         taxRate: data.taxRate,
+        primaryColor: data.primaryColor || "#16a34a",
+        secondaryColor: data.secondaryColor || "#059669",
+        accentColor: data.accentColor || "#10b981",
         emailNotifications: data.emailNotifications,
         orderNotifications: data.orderNotifications,
         lowStockAlerts: data.lowStockAlerts,
@@ -88,6 +97,9 @@ export default function SettingsPage() {
           shippingFee: settings.shippingFee,
           deliveryTime: `${settings.deliveryTime} days`,
           taxRate: settings.taxRate,
+          primaryColor: settings.primaryColor,
+          secondaryColor: settings.secondaryColor,
+          accentColor: settings.accentColor,
           emailNotifications: settings.emailNotifications,
           orderNotifications: settings.orderNotifications,
           lowStockAlerts: settings.lowStockAlerts,
@@ -273,6 +285,146 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Theme Customization */}
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🎨</span>
+              <h2 className="text-xl font-bold text-gray-900">Theme Customization</h2>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">Choose a preset theme or customize colors manually</p>
+          </div>
+          <div className="p-6 space-y-6">
+            {/* Theme Presets */}
+            <div>
+              <Label className="text-base font-semibold mb-4 block">Preset Themes</Label>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                {themes.map((theme) => {
+                  const isSelected =
+                    settings.primaryColor === theme.primaryColor &&
+                    settings.secondaryColor === theme.secondaryColor &&
+                    settings.accentColor === theme.accentColor;
+                  return (
+                    <button
+                      key={theme.name}
+                      onClick={() =>
+                        setSettings({
+                          ...settings,
+                          primaryColor: theme.primaryColor,
+                          secondaryColor: theme.secondaryColor,
+                          accentColor: theme.accentColor,
+                        })
+                      }
+                      className={`p-4 rounded-lg border-2 transition-all text-left ${
+                        isSelected
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-200 hover:border-gray-300 bg-gray-50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex gap-1">
+                          <div
+                            className="w-5 h-5 rounded-full"
+                            style={{ backgroundColor: theme.primaryColor }}
+                          />
+                          <div
+                            className="w-5 h-5 rounded-full"
+                            style={{ backgroundColor: theme.secondaryColor }}
+                          />
+                          <div
+                            className="w-5 h-5 rounded-full"
+                            style={{ backgroundColor: theme.accentColor }}
+                          />
+                        </div>
+                      </div>
+                      <p className="font-semibold text-gray-900 text-sm">{theme.name}</p>
+                      <p className="text-xs text-gray-600 mt-1">{theme.description}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Custom Colors */}
+            <div className="border-t border-gray-200 pt-6">
+              <Label className="text-base font-semibold mb-4 block">Custom Colors</Label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <Label htmlFor="primaryColor">Primary Color</Label>
+                  <div className="flex items-center gap-3 mt-2">
+                    <input
+                      id="primaryColor"
+                      type="color"
+                      value={settings.primaryColor}
+                      onChange={(e) =>
+                        setSettings({ ...settings, primaryColor: e.target.value })
+                      }
+                      className="w-20 h-12 rounded-lg cursor-pointer border border-gray-200"
+                    />
+                    <Input
+                      type="text"
+                      value={settings.primaryColor}
+                      onChange={(e) =>
+                        setSettings({ ...settings, primaryColor: e.target.value })
+                      }
+                      placeholder="#16a34a"
+                      className="flex-1 font-mono text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="secondaryColor">Secondary Color</Label>
+                  <div className="flex items-center gap-3 mt-2">
+                    <input
+                      id="secondaryColor"
+                      type="color"
+                      value={settings.secondaryColor}
+                      onChange={(e) =>
+                        setSettings({ ...settings, secondaryColor: e.target.value })
+                      }
+                      className="w-20 h-12 rounded-lg cursor-pointer border border-gray-200"
+                    />
+                    <Input
+                      type="text"
+                      value={settings.secondaryColor}
+                      onChange={(e) =>
+                        setSettings({ ...settings, secondaryColor: e.target.value })
+                      }
+                      placeholder="#059669"
+                      className="flex-1 font-mono text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="accentColor">Accent Color</Label>
+                  <div className="flex items-center gap-3 mt-2">
+                    <input
+                      id="accentColor"
+                      type="color"
+                      value={settings.accentColor}
+                      onChange={(e) =>
+                        setSettings({ ...settings, accentColor: e.target.value })
+                      }
+                      className="w-20 h-12 rounded-lg cursor-pointer border border-gray-200"
+                    />
+                    <Input
+                      type="text"
+                      value={settings.accentColor}
+                      onChange={(e) =>
+                        setSettings({ ...settings, accentColor: e.target.value })
+                      }
+                      placeholder="#10b981"
+                      className="flex-1 font-mono text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Notification Settings */}
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b border-gray-200">
@@ -296,7 +448,12 @@ export default function SettingsPage() {
                   }
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div 
+                  className="w-11 h-6 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"
+                  style={{
+                    backgroundColor: settings.emailNotifications ? (settings.primaryColor || '#16a34a') : '#e5e7eb',
+                  }}
+                ></div>
               </label>
             </div>
 
@@ -314,7 +471,12 @@ export default function SettingsPage() {
                   }
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div 
+                  className="w-11 h-6 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"
+                  style={{
+                    backgroundColor: settings.orderNotifications ? (settings.primaryColor || '#16a34a') : '#e5e7eb',
+                  }}
+                ></div>
               </label>
             </div>
 
@@ -330,7 +492,12 @@ export default function SettingsPage() {
                   onChange={(e) => setSettings({ ...settings, lowStockAlerts: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                <div 
+                  className="w-11 h-6 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"
+                  style={{
+                    backgroundColor: settings.lowStockAlerts ? (settings.primaryColor || '#16a34a') : '#e5e7eb',
+                  }}
+                ></div>
               </label>
             </div>
           </div>
@@ -339,9 +506,15 @@ export default function SettingsPage() {
         {/* Save Button */}
         <div className="flex justify-end">
           <Button 
-            type="submit" 
-            className="bg-green-600 hover:bg-green-700"
+            type="submit"
             disabled={saving}
+            style={{ 
+              backgroundColor: settings.primaryColor || '#16a34a',
+              color: 'white',
+              opacity: saving ? 0.7 : 1
+            }}
+            onMouseEnter={(e) => !saving && (e.currentTarget.style.opacity = '0.9')}
+            onMouseLeave={(e) => !saving && (e.currentTarget.style.opacity = '1')}
           >
             <Save size={20} className="mr-2" />
             {saving ? 'Saving...' : 'Save Settings'}

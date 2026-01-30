@@ -8,8 +8,10 @@ import { Product } from "@/types";
 import { Plus, Edit, Trash2, Search, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { uploadToCloudinary, isEmoji } from "@/utils/cloudinary";
+import { useSettings } from "@/hooks/useSettings";
 
 export default function ProductsManagement() {
+  const { settings } = useSettings();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -211,7 +213,8 @@ export default function ProductsManagement() {
             setEditingProduct(null);
             setShowAddModal(true);
           }}
-          className="bg-green-600 hover:bg-green-700"
+          className="text-white"
+          style={{ backgroundColor: settings?.primaryColor }}
         >
           <Plus size={20} className="mr-2" />
           Add Product
@@ -222,57 +225,57 @@ export default function ProductsManagement() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <button
           onClick={() => setStockFilter("all")}
-          className={`rounded-lg shadow p-6 transition-all ${
-            stockFilter === "all"
-              ? "bg-blue-50 border-2 border-blue-600"
-              : "bg-white border-2 border-transparent hover:border-gray-200"
-          }`}
+          className="rounded-lg shadow p-6 transition-all border-2"
+          style={{
+            backgroundColor: stockFilter === "all" ? `${settings?.primaryColor}10` : '#ffffff',
+            borderColor: stockFilter === "all" ? settings?.primaryColor : 'transparent',
+          }}
         >
           <div className="text-left">
             <p className="text-sm text-gray-600">Total Products</p>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
+            <p className="text-3xl font-bold text-gray-900 mt-2" style={{ color: settings?.primaryColor }}>{stats.total}</p>
           </div>
         </button>
 
         <button
           onClick={() => setStockFilter("instock")}
-          className={`rounded-lg shadow p-6 transition-all ${
-            stockFilter === "instock"
-              ? "bg-green-50 border-2 border-green-600"
-              : "bg-white border-2 border-transparent hover:border-gray-200"
-          }`}
+          className="rounded-lg shadow p-6 transition-all border-2"
+          style={{
+            backgroundColor: stockFilter === "instock" ? `${settings?.primaryColor}10` : '#ffffff',
+            borderColor: stockFilter === "instock" ? settings?.primaryColor : 'transparent',
+          }}
         >
           <div className="text-left">
             <p className="text-sm text-gray-600">In Stock</p>
-            <p className="text-3xl font-bold text-green-600 mt-2">{stats.instock}</p>
+            <p className="text-3xl font-bold mt-2" style={{ color: settings?.primaryColor }}>{stats.instock}</p>
           </div>
         </button>
 
         <button
           onClick={() => setStockFilter("lowstock")}
-          className={`rounded-lg shadow p-6 transition-all ${
-            stockFilter === "lowstock"
-              ? "bg-yellow-50 border-2 border-yellow-600"
-              : "bg-white border-2 border-transparent hover:border-gray-200"
-          }`}
+          className="rounded-lg shadow p-6 transition-all border-2"
+          style={{
+            backgroundColor: stockFilter === "lowstock" ? `${settings?.secondaryColor}10` : '#ffffff',
+            borderColor: stockFilter === "lowstock" ? settings?.secondaryColor : 'transparent',
+          }}
         >
           <div className="text-left">
             <p className="text-sm text-gray-600">Low Stock</p>
-            <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.lowstock}</p>
+            <p className="text-3xl font-bold mt-2" style={{ color: settings?.secondaryColor }}>{stats.lowstock}</p>
           </div>
         </button>
 
         <button
           onClick={() => setStockFilter("outofstock")}
-          className={`rounded-lg shadow p-6 transition-all ${
-            stockFilter === "outofstock"
-              ? "bg-red-50 border-2 border-red-600"
-              : "bg-white border-2 border-transparent hover:border-gray-200"
-          }`}
+          className="rounded-lg shadow p-6 transition-all border-2"
+          style={{
+            backgroundColor: stockFilter === "outofstock" ? `${settings?.accentColor}10` : '#ffffff',
+            borderColor: stockFilter === "outofstock" ? settings?.accentColor : 'transparent',
+          }}
         >
           <div className="text-left">
             <p className="text-sm text-gray-600">Out of Stock</p>
-            <p className="text-3xl font-bold text-red-600 mt-2">{stats.outofstock}</p>
+            <p className="text-3xl font-bold mt-2 text-red-600">{stats.outofstock}</p>
           </div>
         </button>
       </div>
@@ -280,13 +283,17 @@ export default function ProductsManagement() {
       {/* Search and Filter */}
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex items-center gap-2">
-          <Search className="text-gray-400" size={20} />
+          <Search size={20} style={{ color: settings?.primaryColor }} />
           <Input
             type="text"
             placeholder="Search products by name or category..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1"
+            style={{
+              borderColor: settings?.primaryColor,
+              outlineColor: settings?.secondaryColor,
+            }}
           />
         </div>
       </div>
@@ -295,24 +302,24 @@ export default function ProductsManagement() {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead style={{ backgroundColor: `${settings?.primaryColor}10`, borderBottomColor: settings?.primaryColor, borderBottomWidth: '2px' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Product
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Category
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Price
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Stock
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider" style={{ color: settings?.primaryColor }}>
                   Actions
                 </th>
               </tr>
@@ -321,10 +328,18 @@ export default function ProductsManagement() {
               {filteredProducts.map((product) => {
                 const stockStatus = getStockStatus(product.stock);
                 return (
-                  <tr key={product.id} className="hover:bg-gray-50">
+                  <tr 
+                    key={product.id}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}10`}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
+                        <div
+                          className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0 cursor-pointer transition-opacity"
+                          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                        >
                           {isEmoji(product.image) ? (
                             <span className="text-2xl">{product.image}</span>
                           ) : (
@@ -361,6 +376,10 @@ export default function ProductsManagement() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleEditProduct(product)}
+                          style={{ color: settings?.primaryColor }}
+                          className="hover:bg-opacity-10"
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}20`}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
                           <Edit size={16} />
                         </Button>
@@ -368,7 +387,10 @@ export default function ProductsManagement() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteProduct(product.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="text-red-600 hover:bg-red-50"
+                          style={{ color: '#dc2626' }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
                           <Trash2 size={16} />
                         </Button>
@@ -384,10 +406,10 @@ export default function ProductsManagement() {
 
       {/* Add/Edit Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/10 backdrop-blur-md flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div className="p-6 border-b" style={{ borderColor: settings?.primaryColor }}>
+              <h2 className="text-2xl font-bold" style={{ color: settings?.primaryColor }}>
                 {editingProduct ? "Edit Product" : "Add New Product"}
               </h2>
             </div>
@@ -467,7 +489,19 @@ export default function ProductsManagement() {
                   <div className="flex items-center justify-center w-full">
                     <label
                       htmlFor="image"
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition-colors"
+                      style={{
+                        borderColor: `${settings?.primaryColor}40`,
+                        backgroundColor: `${settings?.primaryColor}05`,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = settings?.primaryColor || '#16a34a';
+                        e.currentTarget.style.backgroundColor = `${settings?.primaryColor}10`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = `${settings?.primaryColor}40`;
+                        e.currentTarget.style.backgroundColor = `${settings?.primaryColor}05`;
+                      }}
                     >
                       {imagePreview ? (
                         <div className="relative w-full h-full">
@@ -488,7 +522,10 @@ export default function ProductsManagement() {
                               e.preventDefault();
                               clearImage();
                             }}
-                            className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
+                            style={{ backgroundColor: '#dc2626' }}
+                            className="absolute top-2 right-2 p-1 text-white rounded-full transition-opacity"
+                            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                           >
                             <X size={16} />
                           </button>
@@ -533,7 +570,13 @@ export default function ProductsManagement() {
               </div>
               
               <div className="flex gap-3 pt-4">
-                <Button type="submit" className="flex-1 bg-green-600 hover:bg-green-700">
+                <Button 
+                  type="submit" 
+                  className="flex-1"
+                  style={{ backgroundColor: settings?.primaryColor, color: 'white' }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                >
                   {editingProduct ? "Update Product" : "Add Product"}
                 </Button>
                 <Button
@@ -544,6 +587,7 @@ export default function ProductsManagement() {
                     setEditingProduct(null);
                   }}
                   className="flex-1"
+                  style={{ borderColor: settings?.primaryColor, color: settings?.primaryColor }}
                 >
                   Cancel
                 </Button>

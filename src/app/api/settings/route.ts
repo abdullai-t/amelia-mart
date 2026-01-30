@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   try {
     // Get settings (there should only be one record)
-    let settings = (await prisma.settings.findFirst()) as any;
+    let settings = await prisma.settings.findFirst();
 
     // If no settings exist, create default ones
     if (!settings) {
@@ -20,7 +20,10 @@ export async function GET() {
           shippingFee: 10,
           taxRate: 2.5,
           deliveryTime: '3-5 days',
-        } as any,
+          primaryColor: '#16a34a',
+          secondaryColor: '#059669',
+          accentColor: '#10b981',
+        },
       });
     }
 
@@ -42,7 +45,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Get existing settings
-    let settings = (await prisma.settings.findFirst()) as any;
+    let settings = await prisma.settings.findFirst();
 
     const nextPaystackPublicKey = typeof body.paystackPublicKey === 'string'
       ? body.paystackPublicKey.trim()
@@ -68,7 +71,10 @@ export async function PUT(request: NextRequest) {
           emailNotifications: body.emailNotifications,
           orderNotifications: body.orderNotifications,
           lowStockAlerts: body.lowStockAlerts,
-        } as any,
+          primaryColor: body.primaryColor || '#16a34a',
+          secondaryColor: body.secondaryColor || '#059669',
+          accentColor: body.accentColor || '#10b981',
+        },
       });
     } else {
       // Update existing
@@ -88,7 +94,10 @@ export async function PUT(request: NextRequest) {
           emailNotifications: body.emailNotifications,
           orderNotifications: body.orderNotifications,
           lowStockAlerts: body.lowStockAlerts,
-        } as any,
+          primaryColor: body.primaryColor || settings.primaryColor,
+          secondaryColor: body.secondaryColor || settings.secondaryColor,
+          accentColor: body.accentColor || settings.accentColor,
+        },
       });
     }
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search, Plus, Trash2, Edit2, X } from "lucide-react";
+import { useSettings } from "@/hooks/useSettings";
 import { toast } from "sonner";
 
 interface Category {
@@ -14,6 +15,7 @@ interface Category {
 }
 
 export default function CategoriesPage() {
+  const { settings } = useSettings();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -152,7 +154,9 @@ export default function CategoriesPage() {
         {!showForm && (
           <Button
             onClick={() => setShowForm(true)}
-            className="bg-green-600 hover:bg-green-700"
+            style={{ backgroundColor: settings?.primaryColor, color: 'white' }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
           >
             <Plus size={18} className="mr-2" />
             Add Category
@@ -169,7 +173,9 @@ export default function CategoriesPage() {
             </h2>
             <button
               onClick={handleCancel}
-              className="text-gray-400 hover:text-gray-600"
+              style={{ color: settings?.primaryColor }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
             >
               <X size={20} />
             </button>
@@ -204,7 +210,9 @@ export default function CategoriesPage() {
             <div className="flex gap-2">
               <Button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700"
+                style={{ backgroundColor: settings?.primaryColor, color: 'white' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               >
                 {editingId ? "Update" : "Create"} Category
               </Button>
@@ -260,7 +268,11 @@ export default function CategoriesPage() {
                 </tr>
               ) : (
                 filteredCategories.map((category) => (
-                  <tr key={category.id} className="hover:bg-gray-50">
+                <tr
+                  key={category.id}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}10`}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                >
                     <td className="px-6 py-4">
                       <p className="font-semibold text-gray-900">
                         {category.name}
@@ -276,7 +288,9 @@ export default function CategoriesPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(category)}
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        style={{ color: settings?.primaryColor }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${settings?.primaryColor}20`}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         <Edit2 size={16} />
                       </Button>
@@ -284,7 +298,9 @@ export default function CategoriesPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDelete(category.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        style={{ color: '#dc2626' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         <Trash2 size={16} />
                       </Button>

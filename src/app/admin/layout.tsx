@@ -59,20 +59,29 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#f9fafb' }}>
       {/* Top Navigation */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <header 
+        className="shadow-sm border-b sticky top-0 z-50"
+        style={{ backgroundColor: '#ffffff', borderColor: `${settings?.primaryColor}20` }}
+      >
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden text-gray-600 hover:text-gray-900"
+              style={{ color: settings?.primaryColor }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              className="lg:hidden"
             >
               {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-lg flex items-center justify-center">
-                <span className="text-xl font-bold text-white">{settings?.storeName?.[0] || "A"}</span>
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                style={{ backgroundColor: settings?.primaryColor }}
+              >
+                {settings?.storeName?.[0] || "A"}
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-800">{settings?.storeName || "Amelia Mart"}</h1>
@@ -90,8 +99,16 @@ export default function AdminLayout({
             <Button 
               onClick={logout}
               variant="ghost" 
-              size="sm" 
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              size="sm"
+              style={{ color: '#dc2626' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#fee2e2';
+                e.currentTarget.style.color = '#991b1b';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#dc2626';
+              }}
             >
               <LogOut size={18} className="mr-2" />
               Logout
@@ -114,11 +131,15 @@ export default function AdminLayout({
               return (
                 <Link key={item.href} href={item.href}>
                   <div
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${
                       active
-                        ? "bg-green-50 text-green-700 font-semibold"
+                        ? "text-white"
                         : "text-gray-700 hover:bg-gray-50"
                     }`}
+                    style={{
+                      backgroundColor: active ? settings?.primaryColor : 'transparent',
+                      color: active ? 'white' : '#374151',
+                    }}
                   >
                     <Icon size={20} />
                     <span>{item.name}</span>
@@ -138,7 +159,7 @@ export default function AdminLayout({
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30 mt-[57px]"
+          className="lg:hidden fixed inset-0 bg-black/10 backdrop-blur-sm z-30 mt-[57px]"
           onClick={() => setSidebarOpen(false)}
         />
       )}
