@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  category    String
+  image       String
+  stock       Int
+  unit        String
+  rating      Float    @default(4.5)
+  reviews     Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orderItems  OrderItem[]
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String
+  address   String?
+  city      String?
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique
+  customerId      String
+  customer        Customer    @relation(fields: [customerId], references: [id])
+  items           OrderItem[]
+  subtotal        Float
+  tax             Float
+  shipping        Float
+  total           Float
+  status          String      @default("pending") // pending, processing, shipped, delivered, cancelled
+  paymentStatus   String      @default("unpaid")  // unpaid, paid, refunded
+  paymentMethod   String?
+  shippingAddress String
+  notes           String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id                    String   @id @default(uuid())
+  storeName             String   @default("Amelia Mart")
+  storeEmail            String   @default("info@ameliamart.com")
+  storePhone            String   @default("0201234567")
+  storeAddress          String   @default("123 Oxford Street, Accra, Ghana")
+  paystackPublicKey     String?  @default("")
+  paystackSecretKey     String?  @default("")
+  freeShippingThreshold Float    @default(100)
+  shippingFee           Float    @default(10)
+  taxRate               Float    @default(2.5)
+  deliveryTime          String   @default("3-5 days")
+  emailNotifications    Boolean  @default(true)
+  orderNotifications    Boolean  @default(true)
+  lowStockAlerts        Boolean  @default(true)
+  updatedAt             DateTime @updatedAt
+}
